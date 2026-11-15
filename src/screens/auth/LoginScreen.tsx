@@ -4,13 +4,13 @@ import {
   Text,
   View,
   TouchableOpacity,
-  SafeAreaView,
   Platform,
   Alert,
 } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '../contexts/AuthContext';
-import { AuthModal, AuthMode } from '../components/AuthModal';
+import { useAuth } from '../../contexts/AuthContext';
+import { AuthModal, AuthMode } from '../../components/AuthModal';
 
 export const WelcomeScreen: React.FC = () => {
   const { loginAsGuest, setIsGuest, signInWithPassword, signUp } = useAuth();
@@ -81,7 +81,7 @@ export const WelcomeScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       <StatusBar style="light" />
 
       <View style={styles.centerContent}>
@@ -135,7 +135,7 @@ export const WelcomeScreen: React.FC = () => {
         onSwitchMode={() => setModalMode(modalMode === 'login' ? 'register' : 'login')}
         onClose={resetForm}
       />
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

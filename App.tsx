@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from './src/contexts/AuthContext';
-import { WelcomeScreen } from './src/screens/LoginScreen';
-import { HomeScreen } from './src/screens/HomeScreen';
+import { WelcomeScreen } from './src/screens/auth/LoginScreen';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
 function MainNavigator() {
-  const { session, isGuest, initialLoading, signOut } = useAuth();
+  const { session, isGuest, initialLoading } = useAuth();
 
   if (initialLoading) {
     return (
@@ -16,13 +17,7 @@ function MainNavigator() {
   }
 
   if (session || isGuest) {
-    return (
-      <HomeScreen
-        userEmail={session?.user?.email}
-        isGuest={isGuest}
-        onLogout={signOut}
-      />
-    );
+    return <AppNavigator />;
   }
 
   return <WelcomeScreen />;
@@ -30,9 +25,11 @@ function MainNavigator() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <MainNavigator />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <MainNavigator />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 
