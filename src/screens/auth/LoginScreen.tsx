@@ -13,7 +13,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { AuthModal, AuthMode } from '../../components/AuthModal';
 
 export const WelcomeScreen: React.FC = () => {
-  const { loginAsGuest, setIsGuest, signInWithPassword, signUp } = useAuth();
+  const { signInWithPassword, signUp } = useAuth();
   const [modalMode, setModalMode] = useState<AuthMode>('welcome');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,7 +56,6 @@ export const WelcomeScreen: React.FC = () => {
         return;
       }
 
-      setIsGuest(false);
       resetForm();
     } else {
       const { data, error } = await signUp(trimmedEmail, password);
@@ -68,7 +67,6 @@ export const WelcomeScreen: React.FC = () => {
       }
 
       if (data.session) {
-        setIsGuest(false);
         resetForm();
       } else {
         Alert.alert(
@@ -110,14 +108,6 @@ export const WelcomeScreen: React.FC = () => {
           onPress={() => setModalMode('register')}
         >
           <Text style={styles.secondaryButtonText}>Criar conta</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.guestButton}
-          activeOpacity={0.7}
-          onPress={loginAsGuest}
-        >
-          <Text style={styles.guestButtonText}>Continuar como convidado</Text>
         </TouchableOpacity>
       </View>
 
@@ -217,14 +207,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
-  },
-  guestButton: {
-    paddingVertical: 10,
-    marginTop: 4,
-  },
-  guestButtonText: {
-    color: '#D1D5DB',
-    fontSize: 14,
-    fontWeight: '500',
   },
 });

@@ -6,7 +6,7 @@ import { WelcomeScreen } from './src/screens/auth/LoginScreen';
 import { AppNavigator } from './src/navigation/AppNavigator';
 
 function MainNavigator() {
-  const { session, isGuest, initialLoading } = useAuth();
+  const { session, initialLoading } = useAuth();
 
   if (initialLoading) {
     return (
@@ -16,7 +16,7 @@ function MainNavigator() {
     );
   }
 
-  if (session || isGuest) {
+  if (session) {
     return <AppNavigator />;
   }
 

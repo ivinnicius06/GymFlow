@@ -16,14 +16,8 @@ const ACTIVE_COLOR = '#16A34A';
 const INACTIVE_COLOR = '#6B7280';
 
 function HomeTabScreen() {
-  const { session, isGuest, signOut } = useAuth();
-  return (
-    <HomeScreen
-      userEmail={session?.user?.email}
-      isGuest={isGuest}
-      onLogout={signOut}
-    />
-  );
+  const { session, signOut } = useAuth();
+  return <HomeScreen userEmail={session?.user?.email} onLogout={signOut} />;
 }
 
 export const AppNavigator: React.FC = () => {
