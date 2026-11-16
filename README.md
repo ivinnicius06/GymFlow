@@ -41,8 +41,3 @@ O projeto contempla todos os tópicos fundamentais do desenvolvimento mobile:
 ---
 
 
-
-4. **Abra o aplicativo:**
-   * Pressione `a` para abrir no emulador Android.
-   * Pressione `w` para abrir no navegador Web.
-   * Ou escaneie o QR Code exibido no terminal utilizando o aplicativo **Expo Go** no celular.
