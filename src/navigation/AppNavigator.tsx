@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
 import { HomeScreen } from '../screens/dashboard/DashboardScreen';
 import { SelectStudentScreen } from '../screens/builder/SelectStudentScreen';
@@ -21,6 +22,8 @@ function HomeTabScreen() {
 }
 
 export const AppNavigator: React.FC = () => {
+  const { bottom } = useSafeAreaInsets();
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -34,8 +37,8 @@ export const AppNavigator: React.FC = () => {
             borderTopWidth: 1,
             elevation: 0,
             shadowOpacity: 0,
-            height: 62,
-            paddingBottom: 8,
+            height: 67 + bottom,
+            paddingBottom: 8 + bottom,
             paddingTop: 6,
           },
           tabBarLabelStyle: {

@@ -22,7 +22,15 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O GymFlow usa sua galeria para adicionar fotos aos exercícios.",
+          "cameraPermission": "O GymFlow usa a câmera para fotografar exercícios.",
+          "microphonePermission": false
+        }
+      ]
     ]
   }
 }

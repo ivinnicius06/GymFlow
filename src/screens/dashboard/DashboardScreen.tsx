@@ -130,7 +130,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <TouchableOpacity
               style={styles.primaryAction}
               activeOpacity={0.8}
-              onPress={() => navigation.navigate('ExercisesTab')}
+              onPress={() => navigation.navigate('ExercisesTab', { openNewExercise: true })}
             >
               <Feather name="plus" size={16} color="#FFFFFF" />
               <Text style={styles.actionText}>Novo exercício</Text>

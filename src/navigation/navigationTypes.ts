@@ -1,7 +1,7 @@
 export type MainTabParamList = {
   HomeTab: undefined;
   StudentsTab: undefined;
-  ExercisesTab: undefined;
+  ExercisesTab: { openNewExercise?: boolean } | undefined;
   WorkoutsTab: undefined;
   ProgressTab: undefined;
 };

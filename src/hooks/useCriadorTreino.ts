@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 import { supabase } from '../services/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import type {
@@ -175,6 +176,7 @@ function obterDataFormatada(data: Date = new Date()): string {
 
 export function useCriadorTreino() {
   const { session } = useAuth();
+  const focado = useIsFocused();
 
   // Etapa atual: 1 = Aluno, 2 = Exercícios, 3 = Configuração (Treino A)
   const [etapaAtual, setEtapaAtual] = useState<1 | 2 | 3>(1);
@@ -246,7 +248,7 @@ export function useCriadorTreino() {
     let ativo = true;
 
     async function carregarDadosRemotos() {
-      if (!session) return;
+      if (!session || !focado) return;
       try {
         setCarregando(true);
         const [alunosRes, exerciciosRes] = await Promise.all([
@@ -278,7 +280,7 @@ export function useCriadorTreino() {
           }
         }
 
-        if (exerciciosRes.data && exerciciosRes.data.length > 0) {
+        if (exerciciosRes.data) {
           const exerciciosMapeados: ExercicioCatalogo[] = exerciciosRes.data.map(
             (item: {
               id: string;
@@ -315,7 +317,7 @@ export function useCriadorTreino() {
     return () => {
       ativo = false;
     };
-  }, [session]);
+  }, [session, focado]);
 
   // Carrega rascunho salvo do AsyncStorage
   useEffect(() => {
