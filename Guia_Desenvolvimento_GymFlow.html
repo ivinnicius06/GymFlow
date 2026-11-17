@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>GymFlow - Guia de Desenvolvimento & Estrutura de Equipe (GitFlow)</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 14mm 12mm 14mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1f2937;
+      background-color: #ffffff;
+      line-height: 1.45;
+      font-size: 11pt;
+    }
+
+    /* Header e Capa */
+    .header-banner {
+      background: linear-gradient(135deg, #0b1210 0%, #13241d 100%);
+      color: #ffffff;
+      padding: 24px 28px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 6px solid #16a34a;
+    }
+
+    .brand-tag {
+      display: inline-block;
+      background-color: #16a34a;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 9pt;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 20pt;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 11.5pt;
+      color: #9ca3af;
+      margin-bottom: 14px;
+    }
+
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 9pt;
+      color: #d1d5db;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 10px;
+    }
+
+    .meta-item strong {
+      color: #4ade80;
+    }
+
+    /* Seções */
+    h2 {
+      font-size: 13.5pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 22px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 .num {
+      background-color: #16a34a;
+      color: white;
+      font-size: 10pt;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: #334155;
+    }
+
+    /* Tabelas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px 0;
+      font-size: 9.5pt;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      border: 1px solid #e2e8f0;
+    }
+
+    th {
+      background-color: #f8fafc;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #cbd5e1;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fbfcfe;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 600;
+    }
+
+    .badge-green { background-color: #dcfce7; color: #15803d; }
+    .badge-blue { background-color: #e0f2fe; color: #0369a1; }
+    .badge-purple { background-color: #f3e8ff; color: #7e22ce; }
+    .badge-orange { background-color: #ffedd5; color: #c2410c; }
+    .badge-gray { background-color: #f1f5f9; color: #475569; }
+
+    /* Cards dos Integrantes */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+      margin-bottom: 14px;
+    }
+
+    .member-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      background-color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      page-break-inside: avoid;
+    }
+
+    .member-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 6px;
+    }
+
+    .member-title {
+      font-weight: 700;
+      font-size: 10.5pt;
+      color: #0f172a;
+    }
+
+    .branch-name {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 8pt;
+      background-color: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0f172a;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 6px;
+    }
+
+    .card-list li {
+      font-size: 8.8pt;
+      margin-bottom: 5px;
+      padding-left: 14px;
+      position: relative;
+      color: #475569;
+    }
+
+    .card-list li::before {
+      content: "•";
+      color: #16a34a;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .card-tag-section {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    /* Caixas de Alerta */
+    .alert-box {
+      background-color: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin: 12px 0;
+      font-size: 9.5pt;
+      color: #166534;
+      page-break-inside: avoid;
+    }
+
+    .alert-box strong {
+      color: #14532d;
+    }
+
+    /* Blocos de Código */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace;
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+    }
+
+    pre {
+      padding: 10px 12px;
+      font-size: 8.5pt;
+      overflow-x: auto;
+      margin: 8px 0 12px 0;
+      line-height: 1.4;
+      color: #0f172a;
+      page-break-inside: avoid;
+    }
+
+    code {
+      padding: 1px 4px;
+      font-size: 8.5pt;
+      color: #0f172a;
+    }
+
+    .flow-diagram {
+      background-color: #0b1210;
+      color: #f8fafc;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: Consolas, monospace;
+      font-size: 8.5pt;
+      margin: 12px 0;
+      border-left: 4px solid #16a34a;
+      line-height: 1.4;
+      page-break-inside: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 8.5pt;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header / Capa -->
+  <div class="header-banner">
+    <div class="brand-tag">GymFlow • Projeto React Native</div>
+    <div class="title">Guia de Engenharia & Gestão de Equipe</div>
+    <div class="subtitle">Estratégia GitFlow, Divisão Oficial do Time e Cobertura Mobile Completa</div>
+    <div class="meta-bar">
+      <div class="meta-item"><strong>Equipe:</strong> Gustavo, Ícaro, Guilherme e Jeann</div>
+      <div class="meta-item"><strong>Repositório:</strong> GymFlow (Expo / RN)</div>
+      <div class="meta-item"><strong>Backend:</strong> Supabase</div>
+      <div class="meta-item"><strong>Design Target:</strong> Protótipo Figma (9 Telas)</div>
+    </div>
+  </div>
+
+  <!-- Seção 1: Visão Geral do Protótipo Figma -->
+  <h2><span class="num">1</span> Visão Geral do Protótipo Figma (GymFlow)</h2>
+  <p>
+    O aplicativo <strong>GymFlow</strong> conta com <strong>9 telas principais</strong> no Figma (resolução iPhone 390 × 844 px). A divisão oficial atribui as telas a cada membro da equipe de forma equilibrada por fluxo de funcionalidade:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 8%;">Tela</th>
+        <th style="width: 32%;">Nome / Funcionalidade</th>
+        <th>Elementos Principais da Interface</th>
+        <th style="width: 25%;">Responsável &amp; Branch</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>01</strong></td>
+        <td>Splash / Login (5:3)</td>
+        <td>Logo esportivo verde, slogan, botões Entrar, Criar conta e Convidado</td>
+        <td><span class="badge badge-green">Gustavo</span> <code>feature/login</code></td>
+      </tr>
+      <tr>
+        <td><strong>02</strong></td>
+        <td>Dashboard Principal (5:21)</td>
+        <td>Header com avatar, KPI cards (48 Ex., 23 Alunos, 12 Treinos), atalhos e treinos recentes</td>
+        <td><span class="badge badge-green">Gustavo</span> <code>feature/login</code></td>
+      </tr>
+      <tr>
+        <td><strong>03</strong></td>
+        <td>Catálogo de Exercícios (5:127)</td>
+        <td>Barra de pesquisa em tempo real, filtros horizontais por músculo e cards detalhados</td>
+        <td><span class="badge badge-purple">Guilherme</span> <code>feature/exercises</code></td>
+      </tr>
+      <tr>
+        <td><strong>04</strong></td>
+        <td>Novo Exercício (5:243)</td>
+        <td>Foto do exercício (câmera/galeria), inputs, seletores e vídeo explicativo</td>
+        <td><span class="badge badge-purple">Guilherme</span> <code>feature/exercises</code></td>
+      </tr>
+      <tr>
+        <td><strong>05</strong></td>
+        <td>Criar Treino - Aluno (5:292)</td>
+        <td>Etapa 1 do Wizard: Stepper numerado, busca de alunos e seleção via Radio button</td>
+        <td><span class="badge badge-blue">Ícaro</span> <code>feature/workout-builder</code></td>
+      </tr>
+      <tr>
+        <td><strong>06</strong></td>
+        <td>Adicionar Exercícios (6:2)</td>
+        <td>Etapa 2 do Wizard: Listagem com checkboxes de seleção múltipla e contador dinâmico</td>
+        <td><span class="badge badge-blue">Ícaro</span> <code>feature/workout-builder</code></td>
+      </tr>
+      <tr>
+        <td><strong>07</strong></td>
+        <td>Configuração do Treino (6:75)</td>
+        <td>Etapa 3 do Wizard: Ajuste fino de séries, repetições, carga (kg) e descanso (s)</td>
+        <td><span class="badge badge-blue">Ícaro</span> <code>feature/workout-builder</code></td>
+      </tr>
+      <tr>
+        <td><strong>08</strong></td>
+        <td>Acompanhamento ao Vivo (6:165)</td>
+        <td>Execução em tempo real, barra de progresso verde, check de séries e cronômetro de descanso</td>
+        <td><span class="badge badge-orange">Jeann</span> <code>feature/workout-tracker</code></td>
+      </tr>
+      <tr>
+        <td><strong>09</strong></td>
+        <td>Progresso &amp; PRs (6:221)</td>
+        <td>Abas (Evolução, Medidas, PRs), gráfico temporal de cargas e lista de Recordes Pessoais</td>
+        <td><span class="badge badge-orange">Jeann</span> <code>feature/workout-tracker</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Seção 2: Modelo GitFlow -->
+  <h2><span class="num">2</span> Modelo de Versionamento: GitFlow</h2>
+  <p>
+    Para garantir a colaboração eficiente sem conflitos, o time adota o <strong>GitFlow</strong> estruturado com as 4 branches oficiais:
+  </p>
+
+  <div class="flow-diagram">
+main        ───●───────────────────────────────────────────────────────●─── (Release v1.0)
+                \                                                     /
+develop      ────●────────●─────────────●─────────────●──────────────●───── (Integração)
+                  \        \             \             \            /
+feature/login      └──●─────┘ (Gustavo: Login/Home)     \          /
+feature/workout-builder ──────────────────└──●──────────┘ (Ícaro: Wizard)/
+feature/exercises            ─────────────────────────────└──●──────┘ (Guilherme)/
+feature/workout-tracker      ───────────────────────────────────────└──● (Jeann)
+  </div>
+
+  <div class="alert-box">
+    <strong>Responsabilidade por Domínio:</strong> Cada membro é proprietário de suas respectivas telas e hooks em diretórios isolados, evitando sobreposição e garantindo autonomia durante o desenvolvimento.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Seção 3: Divisão dos 4 Integrantes -->
+  <h2><span class="num">3</span> Divisão Oficial de Tarefas da Equipe</h2>
+
+  <div class="cards-grid">
+    <!-- Gustavo -->
+    <div class="member-card">
+      <div class="member-header">
+        <span class="member-title">👤 Gustavo (2 Telas)</span>
+        <span class="branch-name">feature/login</span>
+      </div>
+      <p style="font-size: 8.5pt; color: #16a34a; font-weight: 600;">Módulo: Autenticação, Sessão &amp; Dashboard Principal</p>
+      <ul class="card-list">
+        <li><strong>Telas:</strong> Splash / Onboarding (Figma 1) + Dashboard Principal (Figma 2).</li>
+        <li><strong>Autenticação:</strong> Login, cadastro, recuperação e modo visitante (Guest Mode).</li>
+        <li><strong>Dashboard:</strong> Header com avatar do usuário, 3 KPI Cards com métricas do dia, lista de treinos recentes e atalhos rápidos.</li>
+        <li><strong>Navegação:</strong> Configuração base da **Bottom Tab Bar** (5 abas: Início, Alunos, Exercícios, Treinos, Mais).</li>
+        <li><strong>Persistência:</strong> Armazenamento local do token de sessão no <code>AsyncStorage</code>.</li>
+      </ul>
+      <div class="card-tag-section">
+        <span class="badge badge-green">Supabase Auth</span>
+        <span class="badge badge-blue">AsyncStorage</span>
+        <span class="badge badge-purple">Bottom Tabs</span>
+        <span class="badge badge-gray">StatCards</span>
+      </div>
+    </div>
+
+    <!-- Ícaro -->
+    <div class="member-card">
+      <div class="member-header">
+        <span class="member-title">👤 Ícaro (3 Telas / 1 Fluxo)</span>
+        <span class="branch-name">feature/workout-builder</span>
+      </div>
+      <p style="font-size: 8.5pt; color: #16a34a; font-weight: 600;">Módulo: Criador de Treinos (Wizard em 3 Etapas)</p>
+      <ul class="card-list">
+        <li><strong>Telas:</strong> Seleção de Aluno (Figma 5) + Adicionar Exercícios (Figma 6) + Configuração de Séries (Figma 7).</li>
+        <li><strong>Stepper:</strong> Componente visual numerado de 4 etapas no topo.</li>
+        <li><strong>Seleção Múltipla:</strong> Listagem com checkboxes dinâmicos e botão inferior com contador (*"Adicionar selecionados (2)"*).</li>
+        <li><strong>Configuração Fina:</strong> Ajuste de séries, repetições, carga (kg) e descanso (s) por exercício, salvando o treino montado no Supabase.</li>
+        <li><strong>Persistência:</strong> Rascunho da montagem do treino no <code>AsyncStorage</code>.</li>
+      </ul>
+      <div class="card-tag-section">
+        <span class="badge badge-green">CRUD Treinos</span>
+        <span class="badge badge-blue">Stepper Wizard</span>
+        <span class="badge badge-purple">useWorkoutBuilder</span>
+        <span class="badge badge-orange">Checkboxes</span>
+      </div>
+    </div>
+
+    <!-- Guilherme -->
+    <div class="member-card">
+      <div class="member-header">
+        <span class="member-title">👤 Guilherme (2 Telas)</span>
+        <span class="branch-name">feature/exercises</span>
+      </div>
+      <p style="font-size: 8.5pt; color: #16a34a; font-weight: 600;">Módulo: Catálogo &amp; Cadastro de Exercícios</p>
+      <ul class="card-list">
+        <li><strong>Telas:</strong> Catálogo de Exercícios (Figma 3) + Novo Exercício (Figma 4).</li>
+        <li><strong>Filtros &amp; Busca:</strong> Pesquisa textual com hook de debounce e chips de grupo muscular (Peito, Costas, etc.).</li>
+        <li><strong>Formulário:</strong> Cadastro com validação de campos obrigatórios e instruções.</li>
+        <li><strong>Hardware / Câmera:</strong> Integração com <code>expo-image-picker</code> para foto do exercício.</li>
+        <li><strong>Persistência:</strong> Cache offline de exercícios favoritados no <code>AsyncStorage</code>.</li>
+      </ul>
+      <div class="card-tag-section">
+        <span class="badge badge-green">CRUD Exercícios</span>
+        <span class="badge badge-blue">expo-image-picker</span>
+        <span class="badge badge-purple">useDebounce</span>
+        <span class="badge badge-gray">FlatList</span>
+      </div>
+    </div>
+
+    <!-- Jeann -->
+    <div class="member-card">
+      <div class="member-header">
+        <span class="member-title">👤 Jeann (2 Telas)</span>
+        <span class="branch-name">feature/workout-tracker</span>
+      </div>
+      <p style="font-size: 8.5pt; color: #16a34a; font-weight: 600;">Módulo: Execução ao Vivo, Notificações &amp; Progresso</p>
+      <ul class="card-list">
+        <li><strong>Telas:</strong> Acompanhamento ao Vivo (Figma 8) + Progresso e PRs (Figma 9).</li>
+        <li><strong>Execução:</strong> Check de séries, barra de progresso visual e cronômetro de descanso (60s/90s).</li>
+        <li><strong>Notificações:</strong> Disparo via <code>expo-notifications</code> ao término do descanso em background e lembretes diários.</li>
+        <li><strong>Métricas:</strong> Gráficos de evolução de carga temporal e recordes pessoais (PRs).</li>
+        <li><strong>Persistência:</strong> Estado do treino ativo salvo no <code>AsyncStorage</code> caso o app feche.</li>
+      </ul>
+      <div class="card-tag-section">
+        <span class="badge badge-green">expo-notifications</span>
+        <span class="badge badge-blue">Gifted Charts</span>
+        <span class="badge badge-purple">useRestTimer</span>
+        <span class="badge badge-orange">ProgressBar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção 4: Matriz de Requisitos React Native -->
+  <h2><span class="num">4</span> Matriz de Cobertura de Requisitos de React Native</h2>
+  <p>Todos os conteúdos exigidos pela disciplina estão distribuídos de forma equilibrada entre os integrantes:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Requisito Avaliado</th>
+        <th style="width: 27%;">Como é Atendido</th>
+        <th style="width: 28%;">Recurso Técnico / Pacote</th>
+        <th style="width: 20%;">Responsável</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Persistência de Dados</strong></td>
+        <td>Sessão de usuário, rascunho de treino, cache offline e treino em andamento</td>
+        <td><code>@react-native-async-storage/async-storage</code></td>
+        <td><span class="badge badge-green">Toda a Equipe</span></td>
+      </tr>
+      <tr>
+        <td><strong>Requisição Web Services</strong></td>
+        <td>Autenticação, busca de KPIs, CRUD de treinos, exercícios e conclusão de sessões</td>
+        <td><code>@supabase/supabase-js</code> (REST API)</td>
+        <td><span class="badge badge-blue">Toda a Equipe</span></td>
+      </tr>
+      <tr>
+        <td><strong>Notificações</strong></td>
+        <td>Aviso sonoro/push ao fim do descanso e lembretes diários de treino</td>
+        <td><code>expo-notifications</code></td>
+        <td><span class="badge badge-orange">Jeann</span></td>
+      </tr>
+      <tr>
+        <td><strong>Navegação</strong></td>
+        <td>Estrutura com 5 Bottom Tabs, Stacks aninhados e modais</td>
+        <td><code>@react-navigation/bottom-tabs</code> + <code>native-stack</code></td>
+        <td><span class="badge badge-purple">Gustavo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Hooks Customizados</strong></td>
+        <td>Gerenciamento de regras de negócio desacopladas da UI</td>
+        <td><code>useAuth</code>, <code>useWorkoutBuilder</code>, <code>useExercises</code>, <code>useRestTimer</code></td>
+        <td><span class="badge badge-blue">Toda a Equipe</span></td>
+      </tr>
+      <tr>
+        <td><strong>Componentes Dinâmicos</strong></td>
+        <td>Chips clicáveis, barra de progresso, stepper, gráficos e checkboxes</td>
+        <td><code>FlatList</code>, <code>Animated</code>, <code>react-native-gifted-charts</code></td>
+        <td><span class="badge badge-green">Toda a Equipe</span></td>
+      </tr>
+      <tr>
+        <td><strong>Acesso ao Hardware</strong></td>
+        <td>Captura e upload de fotos para exercícios</td>
+        <td><code>expo-image-picker</code></td>
+        <td><span class="badge badge-orange">Guilherme</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- Seção 5: Arquitetura de Pastas -->
+  <h2><span class="num">5</span> Arquitetura de Pastas Sugerida</h2>
+  <p>Esta estrutura modular isola os domínios de cada desenvolvedor, eliminando o risco de sobreposição de código:</p>
+
+  <pre>
+GymFlow/
+├── assets/                       # Ícones, ilustrações e logo do app
+├── src/
+│   ├── components/
+│   │   ├── common/               # [COMPARTILHADO] Botões primários, inputs e containers base
+│   │   ├── dashboard/            # [GUSTAVO] StatCard, RecentWorkoutCard, UserAvatar
+│   │   ├── builder/              # [ÍCARO] StepperBar, StudentSelectCard, ExerciseCheckItem
+│   │   ├── exercises/            # [GUILHERME] ExerciseCard, ChipFilter, MuscleSelector
+│   │   └── tracker/              # [JEANN] ProgressBar, SeriesGrid, RestTimerDisplay, PRCard
+│   ├── contexts/
+│   │   └── AuthContext.tsx       # [GUSTAVO] Contexto global de autenticação e sessão
+│   ├── hooks/
+│   │   ├── useAuth.ts            # [GUSTAVO] Hook de login/logout e sessão
+│   │   ├── useDashboard.ts       # [GUSTAVO] Hook de busca de métricas em tempo real
+│   │   ├── useWorkoutBuilder.ts  # [ÍCARO] Hook do fluxo de criação do treino (etapas 1 a 4)
+│   │   ├── useExercises.ts       # [GUILHERME] Hook de catálogo, busca e filtros
+│   │   └── useRestTimer.ts       # [JEANN] Hook do cronômetro de descanso e notificações
+│   ├── navigation/               # [GUSTAVO]
+│   │   ├── AppNavigator.tsx      # Configuração das 5 Bottom Tabs
+│   │   └── types.ts              # Tipagem do React Navigation
+│   ├── screens/
+│   │   ├── auth/                 # [GUSTAVO] LoginScreen.tsx, SplashScreen.tsx
+│   │   ├── dashboard/            # [GUSTAVO] DashboardScreen.tsx
+│   │   ├── builder/              # [ÍCARO] SelectStudentScreen, AddExercisesScreen, ConfigWorkoutScreen
+│   │   ├── exercises/            # [GUILHERME] ExerciseListScreen.tsx, NewExerciseScreen.tsx
+│   │   └── tracker/              # [JEANN] ActiveWorkoutScreen.tsx, ProgressScreen.tsx
+│   ├── services/
+│   │   ├── supabase.ts           # [COMPARTILHADO] Cliente Supabase inicializado
+│   │   └── notifications.ts      # [JEANN] Configuração e permissões do Expo Notifications
+│   └── utils/
+└── App.tsx                       # Ponto de entrada que chama o AuthProvider e o AppNavigator
+  </pre>
+
+  <!-- Seção 6: Guia de Comandos Git -->
+  <h2><span class="num">6</span> Guia Prático de Comandos Git para a Equipe</h2>
+
+  <h3>1. Inicializando uma Nova Branch de Trabalho</h3>
+  <pre>
+# Sempre parta da develop atualizada:
+git checkout develop
+git pull origin develop
+
+# Crie e publique sua branch (exemplo para o Ícaro):
+git checkout -b feature/workout-builder
+git push -u origin feature/workout-builder
+  </pre>
+
+  <h3>2. Rotina de Commits Diários</h3>
+  <pre>
+git add .
+git commit -m "feat(builder): implementa selecao de aluno com radio button"
+git push
+  </pre>
+
+  <h3>3. Finalizando a Tarefa e Abrindo Pull Request</h3>
+  <pre>
+# 1. Sincronize com a develop antes de abrir o PR para garantir que não há conflitos:
+git checkout develop
+git pull origin develop
+git checkout feature/workout-builder
+git merge develop
+
+# 2. Se tudo estiver ok, envie ao GitHub e abra o Pull Request para a branch 'develop':
+git push origin feature/workout-builder
+  </pre>
+
+  <div class="footer">
+    GymFlow Mobile App • Equipe: Gustavo, Ícaro, Guilherme e Jeann • Atualizado em 16/11/2026 • React Native / Expo
+  </div>
+
+</body>
+</html>
