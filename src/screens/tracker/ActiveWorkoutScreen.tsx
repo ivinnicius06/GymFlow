@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import type { RouteProp } from '@react-navigation/native';
+import type { MainTabParamList } from '../../navigation/navigationTypes';
 import { ProgressBar } from '../../components/tracker/ProgressBar';
 import { SeriesGrid, WorkoutExerciseItem } from '../../components/tracker/SeriesGrid';
 import { RestTimerDisplay } from '../../components/tracker/RestTimerDisplay';
@@ -73,10 +76,13 @@ interface ActiveWorkoutScreenProps {
 }
 
 export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
-  workoutName = 'Treino A - Peito & Tríceps',
+  workoutName: workoutNameProp = 'Treino A - Peito & Tríceps',
   onFinishWorkout,
   onCancelWorkout,
 }) => {
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<MainTabParamList, 'WorkoutsTab'>>();
+  const workoutName = route.params?.workoutTitle ?? workoutNameProp;
   const [exercises, setExercises] = useState<WorkoutExerciseItem[]>(INITIAL_EXERCISES);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [isTimerRunning] = useState<boolean>(true);
@@ -254,6 +260,8 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
             setElapsedSeconds(0);
             if (onCancelWorkout) {
               onCancelWorkout();
+            } else {
+              navigation.navigate('HomeTab');
             }
           },
         },
@@ -325,6 +333,8 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
               setElapsedSeconds(0);
               if (onFinishWorkout) {
                 onFinishWorkout();
+              } else {
+                navigation.navigate('HomeTab');
               }
             },
           },

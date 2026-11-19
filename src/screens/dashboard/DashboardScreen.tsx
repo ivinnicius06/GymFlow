@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDashboard } from '../../hooks/useDashboard';
 import { UserAvatar } from '../../components/dashboard/UserAvatar';
@@ -45,6 +45,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const navigation = useNavigation();
   const { stats, recentWorkouts, loading, refreshing, error, refresh } =
     useDashboard();
+
+  useFocusEffect(
+    useCallback(() => {
+      refresh();
+    }, [refresh]),
+  );
 
   const displayName = getDisplayName(userEmail);
   const initials = getInitials(displayName);
@@ -138,7 +144,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <TouchableOpacity
               style={styles.secondaryAction}
               activeOpacity={0.8}
-              onPress={() => navigation.navigate('WorkoutsTab')}
+              onPress={() => navigation.navigate('StudentsTab')}
             >
               <Feather name="plus" size={16} color="#FFFFFF" />
               <Text style={styles.actionText}>Novo treino</Text>
@@ -184,7 +190,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   title={workout.title}
                   studentName={workout.studentName}
                   dateLabel={workout.dateLabel}
-                  onPress={() => navigation.navigate('WorkoutsTab')}
+                  onPress={() =>
+                    navigation.navigate('WorkoutsTab', {
+                      workoutId: workout.id,
+                      workoutTitle: workout.title,
+                    })
+                  }
                 />
               ))}
             </View>
